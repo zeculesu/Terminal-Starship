@@ -15,14 +15,14 @@ class Scene:
         sprites.append(Sprite(7, 43, ["•", "∘"]))
 
         alert = Sprite(7, 62, ["[!]", "[ ]"])
-        if self.mode == "cruise":
-            alert.enabled = False
+        # if self.mode == "cruise":
+        #     alert.enabled = False
         sprites.append(alert)
 
         sprites.append(Sprite(16, 12,  ["▓│  │▓│  │▓", "▮│  │▮│  │▮"]))
 
-        sprites.append(Sprite(16, 36, ["│  ↯  │",  "│ ↯ ↯ │"]))
-        sprites.append(Sprite(16, 47, ["│  ↯  │",  "│ ↯ ↯ │"]))
+        sprites.append(Sprite(16, 36, ["│  ↯   │",  "│ ↯ ↯  │"]))
+        sprites.append(Sprite(16, 47, ["│  ↯   │",  "│ ↯ ↯  │"]))
 
         sprites.append(Sprite(28, 13, ["°   °   °", 
               ":   :   :", 
