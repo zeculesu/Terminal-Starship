@@ -1,4 +1,5 @@
 import time
+import sys
 
 class Engine:
     def __init__(self, scene, screen, fps=10):
@@ -13,9 +14,10 @@ class Engine:
             self.scene.draw()
             while self.running:
                 start = time.time()
-
+                
                 for sprite in self.scene.sprites:
                     sprite.draw(self.screen, self.frame)
+                    sys.stdout.flush()
                 self.frame += 1
                 # self._handle_input()
 

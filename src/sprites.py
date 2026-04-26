@@ -9,4 +9,5 @@ class Sprite:
         if not self.enabled:
             return
         screen.goto(self.y, self.x)
+        sys.stdout.flush()
         print(self.frames[frame % len(self.frames)], end="", flush=True)

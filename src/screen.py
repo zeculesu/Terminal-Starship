@@ -5,21 +5,23 @@ class Screen:
     ESC = "\033["
 
     def goto(self, y: int, x: int):
-        print(f"{self.ESC}{y};{x}H", end="", flush=True)
+        sys.stdout.write(f"{self.ESC}{y};{x}H")
 
     def hide_cursor(self):
-        print(f"{self.ESC}?25l", end="", flush=True)
-
+        sys.stdout.write(f"{self.ESC}?25l")
+    
     def show_cursor(self):
-        print(f"{self.ESC}?25h", end="", flush=True)
+        sys.stdout.write(f"{self.ESC}?25h")
 
     def clear(self):
-        print(f"{self.ESC}2J", end="", flush=True)
+        sys.stdout.write(f"{self.ESC}2J")
 
     def enter(self):
-        print(f"{self.ESC}?1049h", end="", flush=True)
+        sys.stdout.write(f"{self.ESC}?1049h")
+        sys.stdout.write(f"{self.ESC}H")
         self.hide_cursor()
         self.clear()
+        sys.stdout.flush()
 
     def exit(self):
         self.show_cursor()
