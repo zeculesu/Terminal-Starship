@@ -1,5 +1,6 @@
 import time
 import sys
+import signal
 
 class Engine:
     def __init__(self, scene, screen, fps=10):
@@ -8,6 +9,11 @@ class Engine:
         self.fps = fps
         self.frame = 0
         self.running = True
+        
+        signal.signal(signal.SIGINT, self._signal_handler)
+
+    def _signal_handler(self, signum, frame):
+        self.running = False
 
     def run(self):
         with self.screen:
