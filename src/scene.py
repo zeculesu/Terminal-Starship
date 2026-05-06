@@ -6,8 +6,8 @@ class ShipScene(SceneBase):
     def __init__(self, mode="cruise"):
         super().__init__()
         self.mode = mode
+        self.waves_sprite = None
         self.sprites = self._build_sprites()
-        self.waves_sprite
 
     def _build_sprites(self):
         sprites = []
@@ -50,9 +50,9 @@ class ShipScene(SceneBase):
     #     # print("Terminal Starship v0.1")
     #     sys.stdout.write(IMAGE)
     
-    def draw_background(self, screen):
-        sys.stdout.write(IMAGE)
-
+    def get_background(self):
+        return IMAGE
+        
     def update(self, frame):
         for sprite in self.sprites:
             if sprite is self.waves_sprite:
