@@ -1,7 +1,7 @@
 import argparse
 import sys
 from engine import Engine
-from scene import Scene
+from scene import ShipScene
 from screen import Screen
 
 def main():
@@ -9,7 +9,7 @@ def main():
     parser.add_argument("--mode", default="cruise")
     args = parser.parse_args()
 
-    scene = Scene(mode=args.mode)
+    scene = ShipScene(mode=args.mode)
     screen = Screen()
     engine = Engine(scene, screen)
     

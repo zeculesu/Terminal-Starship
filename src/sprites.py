@@ -1,12 +1,15 @@
+import sys
+
 class Sprite:
-    def __init__(self, y, x, frames, enabled=True):
+    def __init__(self, y, x, frames):
         self.y = y
         self.x = x
         self.frames = frames
-        self.enabled = enabled
+        self.current = 0
+
+    def update(self, frame):
+        self.current = frame % len(self.frames)
 
     def draw(self, screen, frame):
-        if not self.enabled:
-            return
         screen.goto(self.y, self.x)
-        print(self.frames[frame % len(self.frames)], end="", flush=True)
+        sys.stdout.write(self.frames[self.current])

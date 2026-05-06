@@ -1,10 +1,13 @@
 from sprites import Sprite
+from base_scene import SceneBase
 import sys
 
-class Scene:
+class ShipScene(SceneBase):
     def __init__(self, mode="cruise"):
+        super().__init__()
         self.mode = mode
         self.sprites = self._build_sprites()
+        self.waves_sprite
 
     def _build_sprites(self):
         sprites = []
@@ -15,8 +18,6 @@ class Scene:
         sprites.append(Sprite(6, 43, ["•", "∘"]))
 
         alert = Sprite(6, 62, ["[!]", "[ ]"])
-        # if self.mode == "cruise":
-        #     alert.enabled = False
         sprites.append(alert)
 
         sprites.append(Sprite(15, 12,  ["▓│  │▓│  │▓", "▮│  │▮│  │▮"]))
@@ -33,20 +34,33 @@ class Scene:
         sprites.append(Sprite(28, 37, conveyor))
 
         
-        sprites.append(Sprite(35, 14, ["│   ~  │  │   ~  │  │   ~  │  │   ~  │  │   ~  │",
+        sprites.append(Sprite(35, 14, [
               "│   ·  │  │   ·  │  │   ·  │  │   ·  │  │   ·  │",
               "│   ◌  │  │   ◌  │  │   ◌  │  │   ◌  │  │   ◌  │",
-              "│   ·  │  │   ·  │  │   ·  │  │   ·  │  │   ·  │"]))
+              "│   ·  │  │   ·  │  │   ·  │  │   ·  │  │   ·  │",
+              "│   ~  │  │   ~  │  │   ~  │  │   ~  │  │   ~  │"]))
         
-        waves = [("~ " * i).ljust(43) for i in range(22)]
-        sprites.append(Sprite(39, 17, waves))
+        waves = [("~ " * i).ljust(43) for i in range(23)]
+        self.waves_sprite = Sprite(39, 17, waves)
+        sprites.append(self.waves_sprite)
 
         return sprites
 
-    def draw(self):
-        # print("Terminal Starship v0.1")
-        # print("Press Q to quit")
+    # def draw(self):
+    #     # print("Terminal Starship v0.1")
+    #     sys.stdout.write(IMAGE)
+    
+    def draw_background(self, screen):
         sys.stdout.write(IMAGE)
+
+    def update(self, frame):
+        for sprite in self.sprites:
+            if sprite is self.waves_sprite:
+                if frame % 4 == 3:
+                    sprite.update((frame + 1) // 4)
+                continue
+            sprite.update(frame)
+
 
 IMAGE = f"""
     ╔═══════════════════════════════════════════════════════════════════╗
@@ -75,7 +89,7 @@ IMAGE = f"""
     ║  │   │ │ │ │ │ │   │  │  ╭───────────────────────────────────╮ *  ║
     ║  │   ╰─╯ ╰─╯ ╰─╯   │  │  │  КОНВЕЙЕР                         │    ║
     ║  │                 │  │  │  ┌──────────────────────────────┐ │    ║
-    ║  ╰─────────────────╯  │  │  │ ▓→▓→▓→▓→▓→▓→▓→▓→▓→▓→▓→▓      │ │    ║
+    ║  ╰─────────────────╯  │  │  │ ▓→                           │ │    ║
     ║  ← ГИДРО: H₂O         │  │  │ ← ТРАНСПОРТЁР: 0.3 м/с       │ │    ║
     ║ (циклич. регенерация) │  │  └──────────────────────────────┘ │    ║
     ╠═══════════════════════╧══╧═══════════════════════════════════╧════╣
