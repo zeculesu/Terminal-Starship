@@ -12,3 +12,9 @@ Real-time ASCII orbital control system
 pip install -e .
 terminal-starship
 ```
+
+
+## TODO
+- Fix input line
+- Normalize fps number
+- Add input handler
