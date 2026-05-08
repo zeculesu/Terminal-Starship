@@ -46,10 +46,6 @@ class ShipScene(SceneBase):
 
         return sprites
 
-    # def draw(self):
-    #     # print("Terminal Starship v0.1")
-    #     sys.stdout.write(IMAGE)
-    
     def get_background(self):
         return IMAGE
         
@@ -60,6 +56,9 @@ class ShipScene(SceneBase):
                     sprite.update((frame + 1) // 4)
                 continue
             sprite.update(frame)
+    
+    def handle_input(self, key):
+        pass
 
 
 IMAGE = f"""

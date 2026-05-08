@@ -5,7 +5,6 @@ class SceneBase:
         self.sprites = []
 
     def update(self, frame: int):
-        """обновление логики сцены"""
         pass
 
     def draw_background(self, screen):
@@ -17,5 +16,4 @@ class SceneBase:
         return ""
 
     def handle_input(self, key):
-        """реакция сцены на input"""
         pass
