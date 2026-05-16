@@ -14,6 +14,7 @@ class Engine:
         self.running = True
         self.resize_error = False
         self.old_settings = None
+        self.escape_buffer = ''
 
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGWINCH, self._resize_handler)
@@ -25,11 +26,15 @@ class Engine:
             self.running = False
             self.resize_error = True
 
-    def increase_fps(self): self.fps += 10
-    
-    def decrease_fps(self): 
-        if self.fps > 10:
-            self.fps -= 10
+    def increase_fps(self):
+        fps_levels = [0, 1, 2, 5, 10, 20, 30, 60, 120]
+        current_index = fps_levels.index(self.fps) if self.fps in fps_levels else 0
+        self.fps = fps_levels[min(current_index + 1, len(fps_levels) - 1)]
+
+    def decrease_fps(self):
+        fps_levels = [0, 1, 2, 5, 10, 20, 30, 60, 120]
+        current_index = fps_levels.index(self.fps) if self.fps in fps_levels else 0
+        self.fps = fps_levels[max(current_index - 1, 0)]
 
     def print_resize_error(self):
         sys.stdout.write(
@@ -39,20 +44,26 @@ class Engine:
         sys.stdout.flush()
 
     def get_key(self):
-        ch = sys.stdin.read(1)
-        
-        if ch == '\x1b':
-            next1 = sys.stdin.read(1)
-            if next1 == '[':
-                next2 = sys.stdin.read(1)
-                if next2 == 'A':
-                    return 'UP'
-                elif next2 == 'B':
-                    return 'DOWN'
+        import os
+        fd = sys.stdin.fileno()
+
+        ch = os.read(fd, 1)
+
+        if ch == b'\x1b':
+            seq = os.read(fd, 2)
+
+            if seq == b'[A':
+                return 'UP'
+
+            elif seq == b'[B':
+                return 'DOWN'
+
             return None
-        elif ch == 'Q' or ch == "q":
+
+        elif ch in (b'q', b'Q'):
             return 'EXIT'
-        return ch
+
+        return ch.decode(errors='ignore')
     
     def enable_raw_mode(self):
         self.old_settings = termios.tcgetattr(sys.stdin)
@@ -85,15 +96,16 @@ class Engine:
 
                 self.scene.update(self.frame)
 
-                for sprite in self.scene.sprites:
-                    sprite.draw(self.screen, self.frame)
-                self.screen.move_to_input_line() 
-                sys.stdout.flush()
+                if (self.fps != 0):
+                    for sprite in self.scene.sprites:
+                        sprite.draw(self.screen, self.frame)
+                    self.screen.move_to_input_line() 
+                    sys.stdout.flush()
 
-                self.frame += 1
+                    self.frame += 1
 
-                time.sleep(max(0, 1 / self.fps - (time.time() - start)))
-        
+                    time.sleep(max(0, 1 / self.fps - (time.time() - start)))
+            
         self.disable_raw_mode()
         if self.resize_error:
             self.print_resize_error()
